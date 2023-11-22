@@ -1,8 +1,20 @@
-/*
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+.table-cell-wrapper.is-multi-line > p, .table-cell-wrapper.is-multi-line > ul, .table-cell-wrapper.is-multi-line > ol {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-inline-start: 0;
+    line-height: 14px;
+}
 
-If your plugin does not need CSS, delete this file.
+.markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper.is-multi-line.markdown-rendered {
+    height: max-content;
+}
 
-*/
+.table-cell-wrapper.is-multi-line.markdown-rendered {
+    width: max-content;
+    font-size: var(--font-text-size);
+    font-family: var(--font-text);
+    line-height: var(--line-height-normal);
+}
