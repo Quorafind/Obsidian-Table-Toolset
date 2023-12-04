@@ -123,7 +123,6 @@ export default class MyPlugin extends Plugin {
 				function (...data) {
 					const result = next.call(this, ...data);
 					if(!checkPatched() && typeof data[0] === "object" && data[0]?.table) {
-						console.log(data[0]);
 						setVar(data[0]);
 						togglePatched(uninstaller);
 					}
