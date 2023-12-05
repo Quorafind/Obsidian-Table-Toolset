@@ -2,9 +2,6 @@
 .table-cell-wrapper.is-multi-line > p, .table-cell-wrapper.is-multi-line > ul, .table-cell-wrapper.is-multi-line > ol {
     margin-top: 0;
     margin-bottom: 0;
-    margin-block-start: 0;
-    margin-block-end: 0;
-    padding-inline-start: 0;
     line-height: 14px;
 }
 
