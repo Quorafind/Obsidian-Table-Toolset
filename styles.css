@@ -2,7 +2,18 @@
 .table-cell-wrapper.is-multi-line > p, .table-cell-wrapper.is-multi-line > ul, .table-cell-wrapper.is-multi-line > ol {
     margin-top: 0;
     margin-bottom: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
     line-height: 14px;
+}
+
+.table-cell-wrapper.is-multi-line li {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.table-cell-wrapper.is-multi-line ul.contains-task-list {
+    padding-inline-start: 0;
 }
 
 .markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper.is-multi-line.markdown-rendered {

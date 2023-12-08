@@ -1,5 +1,6 @@
 import { MarkdownRenderer, Plugin, requireApiVersion } from 'obsidian';
 import { around } from "monkey-around";
+import { parseAndCompute } from "./utils";
 
 const handleCheckboxClick = async (content: string, htmlDivElement: HTMLDivElement, targetEl: HTMLElement) => {
 	const status = targetEl?.parentElement?.dataset?.task === 'x' ? 'DONE' : 'TODO';
@@ -19,6 +20,46 @@ const handleCheckboxClick = async (content: string, htmlDivElement: HTMLDivEleme
 			const currentTask = tempList[currentTaskIndex];
 			tempList[currentTaskIndex] = currentTask.replace(/- \[ \] |- \[x\] /g, status === 'TODO' ? '- [x] ' : '- [ ] ');
 			return tempList.join('\n').trim();
+		}
+	}
+}
+
+
+const handleRenderMethod = (data: any, updateTrigger: ()=>void) => {
+	const dataText = data.text;
+	const dataTextContainsBr = dataText?.contains('<br>');
+
+	if(dataText && dataTextContainsBr) {
+
+		if(!data.table && !data.table.editor.view.file) return;
+		const text = dataText.replace(/<br>/g, '\n');
+		data.contentEl.empty();
+		MarkdownRenderer.render(data.table.app, text, data.contentEl, data.table.editor.view.file, data.table.editor).then(()=>{
+			data.contentEl.toggleClass(['is-multi-line', 'markdown-rendered', 'markdown-preview-view'], true);
+			(data.contentEl as HTMLElement).onpointerdown = async (evt: PointerEvent) => {
+				const targetEl = evt.target as HTMLElement;
+				if (targetEl.tagName === 'INPUT' && targetEl.hasClass('task-list-item-checkbox')) {
+					evt.preventDefault();
+					evt.stopPropagation();
+					updateTrigger?.();
+					const content = await handleCheckboxClick(text, data.contentEl, targetEl);
+					data.table.updateCell(data, content?.replace(/\n/g, '<br>'));
+					data.table.dispatchTable(data.row, data.col);
+					updateTrigger?.();
+				}
+			};
+		})
+	}
+
+	if(dataText && !dataTextContainsBr && dataText?.trim().startsWith('=') && !dataText?.trim().startsWith('==')) {
+		console.log(dataText);
+		const formula = dataText?.trim().slice(1);
+		const result = parseAndCompute(data.table.rows, formula, data.col);
+		if(result !== undefined) {
+			data.contentEl.empty();
+			MarkdownRenderer.render(data.table.app, result.toString(), data.contentEl, data.table.editor.view.file, data.table.editor).then(()=>{
+				data.contentEl.toggleClass(['is-multi-line', 'markdown-rendered', 'markdown-preview-view'], true);
+			})
 		}
 	}
 }
@@ -57,27 +98,7 @@ export default class MyPlugin extends Plugin {
 			postProcess: (next: any) => {
 				return function (data: any) {
 					const result = next.call(this, data);
-					if(data.text && data.text?.contains('<br>')) {
-
-						if(!data.table && !data.table.editor.view.file) return;
-						const text = data.text.replace(/<br>/g, '\n');
-						data.contentEl.empty();
-						MarkdownRenderer.render(data.table.app, text, data.contentEl, data.table.editor.view.file, data.table.editor).then(()=>{
-							data.contentEl.toggleClass(['is-multi-line', 'markdown-rendered', 'markdown-preview-view'], true);
-							(data.contentEl as HTMLElement).onpointerdown = async (evt: PointerEvent) => {
-								const targetEl = evt.target as HTMLElement;
-								if (targetEl.tagName === 'INPUT' && targetEl.hasClass('task-list-item-checkbox')) {
-									evt.preventDefault();
-									evt.stopPropagation();
-									updateTrigger();
-									const content = await handleCheckboxClick(text, data.contentEl, targetEl);
-									data.table.updateCell(data, content?.replace(/\n/g, '<br>'));
-									data.table.dispatchTable(data.row, data.col);
-									updateTrigger();
-								}
-							};
-						})
-					}
+					handleRenderMethod(data, updateTrigger);
 					return result;
 				}
 			},

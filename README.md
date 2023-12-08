@@ -5,8 +5,8 @@
 # Usage
 
 - Install and enable this plugin.
-- Type in a table cell, when you want to create new line, type shift + enter.
-- Use any multiline syntax you want.
+- Type in a table cell, when you want to create new line, type shift + enter(Obsidian support).
+- Use any multiline syntax you want(Plugin support).
 
 like
 
@@ -15,3 +15,5 @@ like
 | - | - | - |
 | - abcd<br>- abcd | - abcd<br>- abcd | - abcd<br>- abcd |
 ```
+
+And the list in table cell will render as Obsidian support.
