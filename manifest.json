@@ -1,6 +1,6 @@
 {
-	"id": "table-tool-set",
-	"name": "Table tool set",
+	"id": "table-toolset",
+	"name": "Table toolset",
 	"version": "0.0.2",
 	"minAppVersion": "1.5.0",
 	"description": "Allow you render multi line in table cell correctly.",

@@ -1,5 +1,5 @@
 {
-	"name": "table-tool-set",
+	"name": "table-toolset",
 	"version": "0.0.2",
 	"description": "A tool set for working with tables in Obsidian",
 	"main": "main.js",
