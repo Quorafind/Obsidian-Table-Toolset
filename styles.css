@@ -1,3 +1,7 @@
+.table-wrapper {
+    --color-background-formula: rgba(240, 240, 240, 0.73);
+}
+
 
 .table-cell-wrapper.is-multi-line > p, .table-cell-wrapper.is-multi-line > ul, .table-cell-wrapper.is-multi-line > ol {
     margin-top: 0;
@@ -25,4 +29,9 @@
     font-size: var(--font-text-size);
     font-family: var(--font-text);
     line-height: var(--line-height-normal);
+}
+
+.table-cell-wrapper.is-formula-cell.formula-rendered {
+    font-weight: 900;
+    background: var(--color-background-formula);
 }

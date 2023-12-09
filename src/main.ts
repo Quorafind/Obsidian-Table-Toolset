@@ -1,6 +1,6 @@
 import { debounce, MarkdownRenderer, Plugin, requireApiVersion } from 'obsidian';
 import { around } from "monkey-around";
-import { parseAndCompute } from "./utils";
+import { getBorderRange, parseAndCompute } from "./utils";
 
 const getTable = (data: any) => {
 	let realTableRows = data.table.rows;
@@ -131,6 +131,10 @@ const handleRenderMethod = (data: any, updateTrigger: ()=>void) => {
 		const result = parseAndCompute(table, formula, data.col);
 		if(result !== undefined) {
 			data.contentEl.setText(result.toString());
+			data.contentEl.toggleClass(['is-formula-cell', 'formula-rendered'], true);
+			data.contentEl.onmouseover = () => {
+				const tableRange = getBorderRange(table, )
+			}
 		}
 	}
 }

@@ -32,7 +32,12 @@ function parseCondition(conditionStr: string): (value: number) => boolean {
     }
 }
 
-export function parseAndCompute(table: Table, formula: string, currentCol: number): number | string {
+function getStartAndEndPos(formula: string): {
+    funcName: string;
+    startPos: string;
+    endPos: string;
+    condition: (value: number) => boolean;
+} | string {
     let match = formula.match(/([A-Z]+)\((\w+):(\w+)\)/);
     let condition: (value: number) => boolean = () => true;
 
@@ -53,7 +58,23 @@ export function parseAndCompute(table: Table, formula: string, currentCol: numbe
 
     const [, funcName, startPos, endPos] = match;
 
-    console.log(funcName, startPos, endPos, currentCol);
+    return {
+        funcName,
+        startPos,
+        endPos,
+        condition
+    }
+}
+
+export function parseAndCompute(table: Table, formula: string, currentCol: number): number | string {
+    const posRange = getStartAndEndPos(formula);
+    let funcName: string, startPos: string, endPos: string, condition;
+
+    if (typeof posRange === "string") {
+        return posRange;
+    } else {
+        ({ funcName, startPos, endPos, condition } = posRange);
+    }
 
     const functions: { [key: string]: FormulaFunction } = {
         SUM: sum,
@@ -89,6 +110,35 @@ function parsePosition(pos: string): Position {
         return { col, row };
     }
 }
+
+export function getBorderRange(table: Table, startPos: string, endPos: string, ignoreCol?: number) {
+    const start = parsePosition(startPos);
+    const end = parsePosition(endPos);
+    const selectedCells = [];
+
+    const startRow = start.row !== undefined ? start.row : 0;
+    const endRow = end.row !== undefined ? end.row : table.length - 1;
+    const startCol = start.col !== undefined ? start.col : 0;
+    const endCol = end.col !== undefined ? end.col : table[0].length - 1;
+
+    for (let r = startRow; r <= endRow; r++) {
+        for (let c = startCol; c <= endCol; c++) {
+            if (c !== ignoreCol && table[r] && table[r][c]) {
+                const cellObj = { cell: table[r][c].text, row: r, col: c, border: [] };
+
+                if (r === startRow) cellObj.border.push('top');
+                if (r === endRow) cellObj.border.push('bottom');
+                if (c === startCol) cellObj.border.push('left');
+                if (c === endCol) cellObj.border.push('right');
+
+                selectedCells.push(cellObj);
+            }
+        }
+    }
+
+    return selectedCells;
+}
+
 
 function getRange(table: Table, startPos: string, endPos: string, ignoreCol: number): string[] {
     const start = parsePosition(startPos);
