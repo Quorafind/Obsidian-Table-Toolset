@@ -21,4 +21,7 @@ data.json
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
 
-
+# Exclude zip archive files
+*.zip
+*.rar
+*.7z
