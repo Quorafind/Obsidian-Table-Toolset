@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
 						browser: false,
 					}),
 					replace({
+						preventAssignment: true,
 						'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
 					}),
 				],

@@ -30,7 +30,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-react": "^7.27.1",
-		"vite": "^4.4.11"
+		"vite": "^5.0.7"
 	},
 	"dependencies": {
 		"monkey-around": "^2.3.0"
