@@ -1,17 +1,11 @@
-type Cell = {
-    col: number;
-    row: number;
-    text: string;
-};
-
-type Table = Cell[][];
+import { TableCell } from "obsidian";
 
 interface Position {
     row?: number;
     col?: number;
 }
 
-type FormulaFunction = (table: Table, startPos: string, endPos: string, ignoreCol: number) => number;
+type FormulaFunction = (table: TableCell[][], startPos: string, endPos: string, ignoreCol: number) => number;
 
 function parseCondition(conditionStr: string): (value: number) => boolean {
     const match = conditionStr.match(/(<=|>=|<|>|==)(\d+)/);
@@ -32,7 +26,7 @@ function parseCondition(conditionStr: string): (value: number) => boolean {
     }
 }
 
-function getStartAndEndPos(formula: string): {
+export function getStartAndEndPos(formula: string): {
     funcName: string;
     startPos: string;
     endPos: string;
@@ -66,7 +60,7 @@ function getStartAndEndPos(formula: string): {
     }
 }
 
-export function parseAndCompute(table: Table, formula: string, currentCol: number): number | string {
+export function parseAndCompute(table: TableCell[][], formula: string, currentCol: number): number | string {
     const posRange = getStartAndEndPos(formula);
     let funcName: string, startPos: string, endPos: string, condition;
 
@@ -111,7 +105,7 @@ function parsePosition(pos: string): Position {
     }
 }
 
-export function getBorderRange(table: Table, startPos: string, endPos: string, ignoreCol?: number) {
+export function getBorderRange(table: TableCell[][], startPos: string, endPos: string) {
     const start = parsePosition(startPos);
     const end = parsePosition(endPos);
     const selectedCells = [];
@@ -123,8 +117,8 @@ export function getBorderRange(table: Table, startPos: string, endPos: string, i
 
     for (let r = startRow; r <= endRow; r++) {
         for (let c = startCol; c <= endCol; c++) {
-            if (c !== ignoreCol && table[r] && table[r][c]) {
-                const cellObj = { cell: table[r][c].text, row: r, col: c, border: [] };
+            if (table[r] && table[r][c]) {
+                const cellObj = { cell: table[r][c], row: r, col: c, border: [] };
 
                 if (r === startRow) cellObj.border.push('top');
                 if (r === endRow) cellObj.border.push('bottom');
@@ -140,7 +134,7 @@ export function getBorderRange(table: Table, startPos: string, endPos: string, i
 }
 
 
-function getRange(table: Table, startPos: string, endPos: string, ignoreCol: number): string[] {
+function getRange(table: TableCell[][], startPos: string, endPos: string, ignoreCol: number): string[] {
     const start = parsePosition(startPos);
     const end = parsePosition(endPos);
     const values: string[] = [];
@@ -166,23 +160,23 @@ function toNumbers(values: string[]): number[] {
     return values.map(v => parseFloat(v)).filter(v => !isNaN(v));
 }
 
-function sum(table: Table, startPos: string, endPos: string, ignoreCol: number): number {
+function sum(table: TableCell[][], startPos: string, endPos: string, ignoreCol: number): number {
     const values = toNumbers(getRange(table, startPos, endPos, ignoreCol));
     return values.reduce((acc, val) => acc + val, 0);
 }
 
-function max(table: Table, startPos: string, endPos: string, ignoreCol: number): number {
+function max(table: TableCell[][], startPos: string, endPos: string, ignoreCol: number): number {
     const values = toNumbers(getRange(table, startPos, endPos, ignoreCol));
     return Math.max(...values);
 }
 
-function min(table: Table, startPos: string, endPos: string, ignoreCol: number): number {
+function min(table: TableCell[][], startPos: string, endPos: string, ignoreCol: number): number {
     const values = toNumbers(getRange(table, startPos, endPos, ignoreCol));
     return Math.min(...values);
 }
 
 // IF 和 SUMIF 函数的实现稍微复杂一些，因为它们需要额外的条件参数
-export function ifFunction(table: Table, startPos: string, endPos: string, ignoreCol: number, condition: (value: number) => boolean): number {
+export function ifFunction(table: TableCell[][], startPos: string, endPos: string, ignoreCol: number, condition: (value: number) => boolean): number {
     const start = parsePosition(startPos);
     const end = parsePosition(endPos);
 
@@ -205,7 +199,7 @@ export function ifFunction(table: Table, startPos: string, endPos: string, ignor
 }
 
 
-function sumIf(table: Table, startPos: string, endPos: string, ignoreCol: number, condition: (value: number) => boolean): number {
+function sumIf(table: TableCell[][], startPos: string, endPos: string, ignoreCol: number, condition: (value: number) => boolean): number {
     const filteredValues = getRange(table, startPos, endPos, ignoreCol)
         .map(v => parseFloat(v))
         .filter(v => !isNaN(v) && condition(v));
