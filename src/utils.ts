@@ -6,6 +6,11 @@ type Cell = {
 
 type Table = Cell[][];
 
+interface Position {
+    row?: number;
+    col?: number;
+}
+
 type FormulaFunction = (table: Table, startPos: string, endPos: string, ignoreCol: number) => number;
 
 function parseCondition(conditionStr: string): (value: number) => boolean {
@@ -70,17 +75,30 @@ export function parseAndCompute(table: Table, formula: string, currentCol: numbe
 }
 
 // 解析位置，如 "A12"，转换为行和列的索引
-function parsePosition(pos: string): { row: number; col: number } {
-    const col = pos.charCodeAt(0) - 'A'.charCodeAt(0);
-    const row = parseInt(pos.slice(1)) - 1;
-    return { col, row };
+function parsePosition(pos: string): Position {
+    if (!isNaN(parseInt(pos))) {
+        // 如果 pos 是数字，返回行
+        return { row: parseInt(pos) - 1 };
+    } else if (pos.length === 1) {
+        // 如果 pos 是一个字符，返回列
+        return { col: pos.charCodeAt(0) - 'A'.charCodeAt(0) };
+    } else {
+        // 否则返回行和列
+        const col = pos.charCodeAt(0) - 'A'.charCodeAt(0);
+        const row = parseInt(pos.slice(1)) - 1;
+        return { col, row };
+    }
 }
 
-// 从表格中获取特定区域的单元格文本
 function getRange(table: Table, startPos: string, endPos: string, ignoreCol: number): string[] {
-    const { col: startCol, row: startRow } = parsePosition(startPos);
-    const { col: endCol, row: endRow } = parsePosition(endPos);
+    const start = parsePosition(startPos);
+    const end = parsePosition(endPos);
     const values: string[] = [];
+
+    const startRow = start.row !== undefined ? start.row : 0;
+    const endRow = end.row !== undefined ? end.row : table.length - 1;
+    const startCol = start.col !== undefined ? start.col : 0;
+    const endCol = end.col !== undefined ? end.col : table[0].length - 1;
 
     for (let r = startRow; r <= endRow; r++) {
         for (let c = startCol; c <= endCol; c++) {
@@ -89,8 +107,6 @@ function getRange(table: Table, startPos: string, endPos: string, ignoreCol: num
             }
         }
     }
-
-    console.log(values);
 
     return values;
 }
