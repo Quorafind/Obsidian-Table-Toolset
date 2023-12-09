@@ -1,6 +1,6 @@
 {
 	"name": "table-toolset",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "A tool set for working with tables in Obsidian",
 	"main": "main.js",
 	"scripts": {
