@@ -1,11 +1,13 @@
 {
-	"name": "obsidian-custom-plugin-starter",
-	"version": "0.0.1",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"name": "table-tool-set",
+	"version": "0.0.2",
+	"description": "A tool set for working with tables in Obsidian",
 	"main": "main.js",
 	"scripts": {
-		"dev": "node esbuild.config.mjs",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"lint": "eslint . --ext .ts",
+		"dev": "npm run lint && vite build --watch --mode=development",
+		"build:nolint": "NODE_ENV=production rollup -c",
+		"build": "vite build",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
 	"keywords": [],
@@ -13,13 +15,22 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^16.11.6",
-		"@typescript-eslint/eslint-plugin": "5.29.0",
-		"@typescript-eslint/parser": "5.29.0",
+		"@rollup/plugin-commonjs": "^25.0.7",
+		"@rollup/plugin-node-resolve": "^15.2.1",
+		"@rollup/plugin-replace": "^5.0.2",
+		"@rollup/plugin-terser": "^0.4.3",
+		"@typescript-eslint/eslint-plugin": "6.13.2",
+		"@typescript-eslint/parser": "6.13.2",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.14.47",
 		"obsidian": "latest",
 		"tslib": "2.4.0",
-		"typescript": "5.3.2"
+		"typescript": "5.3.2",
+		"eslint": "^7.22.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"eslint-plugin-react": "^7.27.1",
+		"vite": "^4.4.11"
 	},
 	"dependencies": {
 		"monkey-around": "^2.3.0"

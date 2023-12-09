@@ -1,5 +1,4 @@
 import 'obsidian';
-import { Menu } from "obsidian";
 
 declare module 'obsidian' {
     interface Workspace {

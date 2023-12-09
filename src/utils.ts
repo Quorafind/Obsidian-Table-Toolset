@@ -59,8 +59,8 @@ export function parseAndCompute(table: Table, formula: string, currentCol: numbe
         SUM: sum,
         MAX: max,
         MIN: min,
+        IF: (table, startPos, endPos, ignoreCol) => ifFunction(table, startPos, endPos, ignoreCol, condition),
         SUMIF: (table, startPos, endPos, ignoreCol) => sumIf(table, startPos, endPos, ignoreCol, condition),
-        // Add IF function if needed
     };
 
     if (!(funcName in functions)) {
@@ -133,10 +133,33 @@ function min(table: Table, startPos: string, endPos: string, ignoreCol: number):
 }
 
 // IF 和 SUMIF 函数的实现稍微复杂一些，因为它们需要额外的条件参数
-function ifFunction(table: Table, startPos: string, endPos: string, ignoreCol: number, condition: (value: number) => boolean): number[] {
-    const values = toNumbers(getRange(table, startPos, endPos, ignoreCol));
-    return values.filter(condition);
+export function ifFunction(table: Table, startPos: string, endPos: string, ignoreCol: number, condition: (value: number) => boolean): number {
+    const start = parsePosition(startPos);
+    const end = parsePosition(endPos);
+
+    let startValue: number;
+    let endValue: number;
+
+    // Check if startPos is a single cell or a range
+    if (start.row !== undefined && start.col !== undefined) {
+        startValue = parseFloat(table[start.row][start.col].text);
+    } else {
+        // Compute max value for the range
+        startValue = Math.max(...toNumbers(getRange(table, startPos, startPos, ignoreCol)));
+    }
+
+    // Check if endPos is a single cell or a range
+    if (end.row !== undefined && end.col !== undefined) {
+        endValue = parseFloat(table[end.row][end.col].text);
+    } else {
+        // Compute max value for the range
+        endValue = Math.max(...toNumbers(getRange(table, endPos, endPos, ignoreCol)));
+    }
+
+    // Apply the condition to the comparison of startValue and endValue
+    return condition(startValue) && condition(endValue) ? 1 : 0;
 }
+
 
 function sumIf(table: Table, startPos: string, endPos: string, ignoreCol: number, condition: (value: number) => boolean): number {
     const filteredValues = getRange(table, startPos, endPos, ignoreCol)
