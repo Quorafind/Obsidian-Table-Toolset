@@ -1,4 +1,4 @@
-# Obsidian Table Render Enhancer
+# Obsidian Table Toolset
 
 - Support render multi line in table editor.
 - Support toggle checkbox in table editor.
