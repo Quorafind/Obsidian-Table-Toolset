@@ -116,7 +116,6 @@ function toNumbers(values: string[]): number[] {
     return values.map(v => parseFloat(v)).filter(v => !isNaN(v));
 }
 
-// 以下是 SUM、MAX、MIN 函数的实现
 function sum(table: Table, startPos: string, endPos: string, ignoreCol: number): number {
     const values = toNumbers(getRange(table, startPos, endPos, ignoreCol));
     return values.reduce((acc, val) => acc + val, 0);
@@ -140,23 +139,18 @@ export function ifFunction(table: Table, startPos: string, endPos: string, ignor
     let startValue: number;
     let endValue: number;
 
-    // Check if startPos is a single cell or a range
     if (start.row !== undefined && start.col !== undefined) {
         startValue = parseFloat(table[start.row][start.col].text);
     } else {
-        // Compute max value for the range
         startValue = Math.max(...toNumbers(getRange(table, startPos, startPos, ignoreCol)));
     }
 
-    // Check if endPos is a single cell or a range
     if (end.row !== undefined && end.col !== undefined) {
         endValue = parseFloat(table[end.row][end.col].text);
     } else {
-        // Compute max value for the range
         endValue = Math.max(...toNumbers(getRange(table, endPos, endPos, ignoreCol)));
     }
 
-    // Apply the condition to the comparison of startValue and endValue
     return condition(startValue) && condition(endValue) ? 1 : 0;
 }
 
