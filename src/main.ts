@@ -1,7 +1,7 @@
 import { EventRef, Plugin, requireApiVersion, Table, TableCell } from 'obsidian';
 import { around } from "monkey-around";
 import { handleRenderMethod } from "@/table";
-import { markdownTableToArray, parseTableString, updateTableFromData } from "@/utils";
+import { markdownTableToArray, updateTableFromData } from "@/utils";
 
 
 export default class TableToolsPlugin extends Plugin {
@@ -40,6 +40,7 @@ export default class TableToolsPlugin extends Plugin {
 
 	patchTable(table: Table) {
 		this.app.workspace.offref(this.patchTableRef);
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		const self = this;
 
 		const updateTrigger = () => {
