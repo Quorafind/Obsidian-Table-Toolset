@@ -79,12 +79,10 @@ const debounceMap = new Map();
 
 function getOrCreateDebounceFunction(table: Table) {
     const key = table.start + '-' + table.end;
-    console.log(key);
 
     if (!debounceMap.has(key)) {
         const debounceFunc = debounce((cellSet: Set<TableCell>, data: TableCell) => {
             Array.from(cellSet).forEach((cell: TableCell) => {
-                console.log("hello");
                 cell.dirty = true;
                 data.table.rerenderCell(cell);
             });
@@ -95,9 +93,10 @@ function getOrCreateDebounceFunction(table: Table) {
 }
 
 export const handleRenderMethod = (data: TableCell, updateTrigger: () => void) => {
-    console.log(data);
 
     const dataText = data.text;
+
+	console.log(dataText);
     const dataTextContainsBr = dataText?.contains('<br>');
     const updateCellDebounce = getOrCreateDebounceFunction(data.table);
 
@@ -135,7 +134,12 @@ export const handleRenderMethod = (data: TableCell, updateTrigger: () => void) =
         if (!data.table && !data.table.editor.view.file) return;
 
         const text = dataText.replace(/<br>/g, '\n');
-        data.contentEl.empty();
+		console.log(text, data?.table);
+
+		if(!data?.table?.editor?.view?.file || !data?.table?.editor) return;
+		data.contentEl.empty();
+		data.contentEl.toggleClass(['is-multi-line'], true);
+
         MarkdownRenderer.render(data.table.app, text, data.contentEl, data.table.editor.view.file, data.table.editor).then(() => {
             data.contentEl.toggleClass(['is-multi-line', 'markdown-rendered', 'markdown-preview-view'], true);
             (data.contentEl as HTMLElement).onpointerdown = async (evt: PointerEvent) => handlePointerDown(evt, {

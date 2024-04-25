@@ -30,7 +30,7 @@ declare module 'obsidian' {
         isMalformed: boolean;
         isRendering: boolean;
 
-        renderCallbacks: Function[];
+        renderCallbacks: any[];
         rows: TableCell[][];
         selectedCells: TableCell[];
 

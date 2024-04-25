@@ -37,6 +37,7 @@ export default class TableToolsPlugin extends Plugin {
 			postProcess: (next: any) => {
 				return function (data: any) {
 					next.call(this, data);
+					console.log(this);
 					handleRenderMethod(data, updateTrigger);
 				}
 			},
@@ -55,6 +56,36 @@ export default class TableToolsPlugin extends Plugin {
 					}
 					return next.call(this, ...data);
 				}
+			},
+			pasteSelection: (next: any) => {
+				return async function (data: ClipboardEvent) {
+					next.call(this, data);
+
+					const text = data.clipboardData.getData('text/plain');
+					if(!text) return;
+					if(!this.selectedCells) return;
+					const cells = this.selectedCells;
+
+					if(!(cells.length > 1)) return;
+					if (text.split('\n').length > 1) {
+						// 去除空行
+						const newText = text.split('\n').filter((line: string) => line.trim() !== '').join('\n');
+						const rowList = newText.split('\n');
+						const cells = this.selectedCells;
+
+						cells.sort((a: TableCell, b: TableCell) => {
+							return a.row - b.row || a.col - b.col;
+						});
+
+						for (let i = 0; i < cells.length; i++) {
+							await this.updateCell(cells[i], rowList[i]?.replace(/\n/g, '<br>'));
+							setTimeout(async () => {
+								await this.dispatchTable(cells[i].row, cells[i].col);
+								updateTrigger();
+							}, 0)
+						}
+					}
+				}
 			}
 		})
 	}
@@ -66,6 +97,7 @@ export default class TableToolsPlugin extends Plugin {
 			if(this.renderVar) return;
 			this.renderVar = a;
 			this.app.workspace.trigger('patch-table', a.table);
+			a.table.rebuildTable();
 		}
 
 		const checkPatched = () => {
