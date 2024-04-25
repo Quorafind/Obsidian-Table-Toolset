@@ -1,5 +1,5 @@
 .table-wrapper {
-    --color-background-formula: rgba(240, 240, 240, 0.73);
+	--color-background-formula: rgba(240, 240, 240, 0.73);
 }
 
 
@@ -8,32 +8,77 @@
 	margin-block-end: calc(var(--p-spacing) / 2);
 }
 
+.table-cell-wrapper.is-multi-line.markdown-rendered p {
+	margin-block-start: calc(var(--p-spacing) / 2);
+	margin-block-end: calc(var(--p-spacing) / 2);
+	line-height: 20px;
+}
+
 .table-cell-wrapper.is-multi-line li {
-    padding-top: 0;
-    padding-bottom: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 .table-cell-wrapper.is-multi-line ul.contains-task-list {
-    padding-inline-start: 0;
+	padding-inline-start: 0;
 }
 
 .markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper.is-multi-line.markdown-rendered {
-    height: max-content;
+	height: max-content;
 }
 
 .table-cell-wrapper.is-multi-line.markdown-rendered {
-    width: max-content;
-    font-size: var(--font-text-size);
-    font-family: var(--font-text);
-    line-height: var(--line-height-normal);
+	width: max-content;
+	font-size: var(--font-text-size);
+	font-family: var(--font-text);
+	line-height: var(--line-height-normal);
 }
 
 .table-cell-wrapper.is-formula-cell.formula-rendered {
-    font-weight: 900;
-    background: var(--color-background-formula);
+	font-weight: 900;
+	background: var(--color-background-formula);
 }
 
 .table-cell-wrapper .markdown-rendered p {
 	margin-inline-start: calc(var(--p-spacing) / 2);
 	margin-inline-end: calc(var(--p-spacing) / 2);
+}
+
+.columns-table .table-wrapper table, .columns-table .table-wrapper {
+	margin: auto;
+}
+
+.columns-table.markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper, .table-rendered .table-cell-wrapper {
+	height: 100%;
+	box-shadow: var(--shadow-s);
+	margin: var(--size-2-2);
+	padding: var(--size-4-4);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--size-4-2);
+	max-height: calc(100% - 8px);
+}
+
+.columns-table table:has(.table-cell-wrapper) th, table:has(.table-cell-wrapper) tr, table:has(.table-cell-wrapper) thead, table:has(.table-cell-wrapper), table:has(.table-cell-wrapper) tbody td {
+	border: 0 !important;
+	border-color: unset;
+}
+
+.columns-table .table-wrapper table, .columns-table .table-wrapper table td, .columns-table .table-wrapper table th {
+	border: 0 !important;
+	border-color: unset;
+	height: 1px;
+}
+
+.columns-table .table-wrapper table th, .columns-table .table-wrapper table td {
+	padding: 0;
+	height: inherit;
+	min-width: var(--table-column-min-width);
+	overflow: visible;
+	position: relative;
+}
+
+.columns-table .markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
+	position: relative;
+	width: fit-content;
+	margin: auto;
 }
