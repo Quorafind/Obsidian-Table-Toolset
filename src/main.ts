@@ -25,7 +25,9 @@ export default class TableToolsPlugin extends Plugin {
 		this.registerMarkdownPostProcessor(async (el, ctx) => {
 			for (const tableEl of el.findAll('table')) {
 				const section = ctx.getSectionInfo(tableEl);
-				const tableString = section.text.split('\n').slice(section.lineStart, section.lineEnd + 1).join('\n');
+				tableEl.toggleClass('table-rendered', true);
+				if (!section) continue;
+				const tableString = section?.text?.split('\n').slice(section.lineStart, section.lineEnd + 1).join('\n');
 				const table = markdownTableToArray(tableString);
 				await updateTableFromData(table, tableEl as HTMLTableElement, this.app, this, ctx);
 			}

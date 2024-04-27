@@ -1,4 +1,4 @@
-import { App, MarkdownPostProcessorContext, MarkdownRenderer, TableCell, TFile } from "obsidian";
+import { App, MarkdownPostProcessorContext, MarkdownRenderer, TableCell } from "obsidian";
 import TableToolsPlugin from "@/main";
 
 interface Position {

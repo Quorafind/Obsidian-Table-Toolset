@@ -134,7 +134,7 @@ export const handleRenderMethod = (self: TableToolsPlugin, data: TableCell, upda
 	if (dataText && dataTextContainsBr) {
 		if (!data.table && !data.table.editor.view.file) return;
 
-		const text = dataText.replace(/<br>/g, '\n');
+		const text = dataText.replace(/<br>/g, '\n').replace(/\\\|/g, '|');
 		console.log(text, data?.table);
 
 		if (!data?.table?.editor?.view?.file || !data?.table?.editor) return;

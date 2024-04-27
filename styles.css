@@ -19,12 +19,9 @@
 	padding-bottom: 0;
 }
 
-.table-cell-wrapper.is-multi-line ul.contains-task-list {
-	padding-inline-start: 0;
-}
-
 .markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper.is-multi-line.markdown-rendered {
 	height: max-content;
+	width: 100%;
 }
 
 .table-cell-wrapper.is-multi-line.markdown-rendered {
@@ -34,12 +31,12 @@
 	line-height: var(--line-height-normal);
 }
 
-.table-cell-wrapper.is-formula-cell.formula-rendered {
+.table-cell-wrapper.is-multi-line.is-formula-cell.formula-rendered {
 	font-weight: 900;
 	background: var(--color-background-formula);
 }
 
-.table-cell-wrapper .markdown-rendered p {
+.columns-table.markdown-source-view.mod-cm6 .table-cell-wrapper .markdown-rendered p {
 	margin-inline-start: calc(var(--p-spacing) / 2);
 	margin-inline-end: calc(var(--p-spacing) / 2);
 }
@@ -48,7 +45,7 @@
 	margin: auto;
 }
 
-.columns-table.markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper, .table-rendered .table-cell-wrapper {
+.columns-table.markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper, .columns-table.markdown-source-view.mod-cm6 .table-rendered .table-cell-wrapper {
 	height: 100%;
 	box-shadow: var(--shadow-s);
 	margin: var(--size-2-2);
@@ -58,7 +55,7 @@
 	max-height: calc(100% - 8px);
 }
 
-.columns-table table:has(.table-cell-wrapper) th, table:has(.table-cell-wrapper) tr, table:has(.table-cell-wrapper) thead, table:has(.table-cell-wrapper), table:has(.table-cell-wrapper) tbody td {
+.columns-table table:has(.table-cell-wrapper) th, .columns-table table:has(.table-cell-wrapper) tr, .columns-table table:has(.table-cell-wrapper) thead, .columns-table table:has(.table-cell-wrapper), .columns-table table:has(.table-cell-wrapper) tbody td {
 	border: 0 !important;
 	border-color: unset;
 }
@@ -77,7 +74,12 @@
 	position: relative;
 }
 
-.columns-table .markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
+.columns-table.markdown-source-view.mod-cm6 .cm-table-widget th, .columns-table.markdown-source-view.mod-cm6 .cm-table-widget td {
+	padding-bottom: var(--size-4-2);
+	padding-right: var(--size-4-2);
+}
+
+.columns-table.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
 	position: relative;
 	width: fit-content;
 	margin: auto;
